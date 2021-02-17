@@ -56,8 +56,44 @@ private:
 	}
 
 	void _calcurate_image_curvature()
-	{
-		_image_curvature = elem_mul(_image_grad_y, elem_mul(_image_grad_y, _image_grad_xx)) - elem_mul(_image_grad_x, elem_mul(_image_grad_xy, _image_grad_y)) - elem_mul(_image_grad_y, elem_mul(_image_grad_yx, _image_grad_x)) + elem_mul(_image_grad_x, elem_mul(_image_grad_x, _image_grad_yy));
+	{	
+		/*
+		_image_curvature =    elem_mul(_image_grad_y, elem_mul(_image_grad_y, _image_grad_xx)) 
+							- elem_mul(_image_grad_x, elem_mul(_image_grad_xy, _image_grad_y))
+							- elem_mul(_image_grad_y, elem_mul(_image_grad_yx, _image_grad_x))
+							+ elem_mul(_image_grad_x, elem_mul(_image_grad_x, _image_grad_yy));
+		*/
+
+		// (15) on Image Denoising Using Mean Curvature of Image Surface
+		// https://pdfs.semanticscholar.org/b465/c476e3e7f607c01160538bc2f2a25663286e.pdf
+
+		cv::Mat E = cv::Mat::ones(_image_grad_x.size(), _image_grad_x.type());
+		cv::Mat two_E = 2 * E.clone();
+
+		cv::Mat numerator_mat = 	elem_mul(
+									(E + elem_mul(_image_grad_x, _image_grad_x)),
+									_image_grad_yy
+								)
+							-	elem_mul(
+									two_E,				
+									elem_mul(
+										_image_grad_x,
+										elem_mul(_image_grad_y, _image_grad_xy)
+									)
+								)
+							+   elem_mul(
+									(E + elem_mul(_image_grad_y, _image_grad_y)),
+									_image_grad_xx
+								);
+
+		cv::Mat denom_tmp;
+		cv::pow(
+			E + elem_mul(_image_grad_x, _image_grad_x)  + elem_mul(_image_grad_y, _image_grad_y),
+			3.0/2,
+			denom_tmp
+		);
+		cv::Mat denominator_mat = elem_mul(two_E, denom_tmp) + E * 10e-8;
+		_image_curvature = elem_div(numerator_mat, denominator_mat);
 	}
 
 	cv::Mat image_32fc1;
