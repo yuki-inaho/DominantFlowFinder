@@ -1,3 +1,4 @@
+#pragma once
 #include <opencv2/opencv.hpp>
 
 cv::Mat elem_mul(const cv::Mat &mat_a, const cv::Mat &mat_b)
