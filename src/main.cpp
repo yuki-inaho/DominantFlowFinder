@@ -1,5 +1,6 @@
 #include <iostream>
 #include <opencv2/opencv.hpp>
+#include <chrono>
 
 #include "argparse.hpp"
 #include "util.h"
@@ -26,10 +27,15 @@ ParsedArgument parse_args(int argc, char **argv){
 int main(int argc, char **argv)
 {
     ParsedArgument args = parse_args(argc, argv);
-    
+        
     cv::Mat rgb_image = cv::imread("../data/image.png");
+    cv::Mat rgb_image_resized;
     cv::Mat gray_image;
-    cv::cvtColor(rgb_image, gray_image, cv::COLOR_RGB2GRAY);
+    cv::resize(rgb_image, rgb_image_resized, cv::Size(), 0.5, 0.5);
+
+    std::chrono::system_clock::time_point  start, end; // 型は auto で可
+    start = std::chrono::system_clock::now(); // 計測開始時間
+    cv::cvtColor(rgb_image_resized, gray_image, cv::COLOR_RGB2GRAY);
 
     ImageCurvatureCalcurator curvature_calcurtor;
     curvature_calcurtor.calcurate(gray_image);
@@ -38,6 +44,10 @@ int main(int argc, char **argv)
     CuvatureExtremaFinder curvature_extrema_finder;
     curvature_extrema_finder.set_curvature_image(image_curvature);
     curvature_extrema_finder.initialize_pixel_nodes();
+
+    end = std::chrono::system_clock::now(); // 計測開始時間
+    double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count(); //処理に要した時間をミリ秒に変換
+    std::cout << "elapsed: " << elapsed << " [ms]" << std::endl;
 
     // dump image
     if (args.save_image_curvature)
