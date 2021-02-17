@@ -8,17 +8,20 @@ class ImageCurvatureCalcurator
 public:
 	void calcurate(const cv::Mat &image_8uc1)
 	{
-		image_8uc1.convertTo(image_32fc1, CV_32FC1, 1.0/255.0);
+		image_8uc1.convertTo(image_32fc1, CV_32FC1, 1.0 / 255);
+
 		_set_first_image_derivatives(image_32fc1);
 		_set_second_image_derivatives();
 		_calcurate_image_curvature();
 	}
 
-	cv::Mat get(){
+	cv::Mat get()
+	{
 		return _image_curvature;
 	};
 
-	cv::Mat operator()(const cv::Mat &image){
+	cv::Mat operator()(const cv::Mat &image)
+	{
 		calcurate(image);
 		return get();
 	}
@@ -54,10 +57,7 @@ private:
 
 	void _calcurate_image_curvature()
 	{
-		_image_curvature =   elem_mul(_image_grad_y, elem_mul(_image_grad_y, _image_grad_xx))
-						   - elem_mul(_image_grad_x, elem_mul(_image_grad_xy, _image_grad_y))
-						   - elem_mul(_image_grad_y, elem_mul(_image_grad_yx, _image_grad_x))
-						   + elem_mul(_image_grad_x, elem_mul(_image_grad_x, _image_grad_yy));
+		_image_curvature = elem_mul(_image_grad_y, elem_mul(_image_grad_y, _image_grad_xx)) - elem_mul(_image_grad_x, elem_mul(_image_grad_xy, _image_grad_y)) - elem_mul(_image_grad_y, elem_mul(_image_grad_yx, _image_grad_x)) + elem_mul(_image_grad_x, elem_mul(_image_grad_x, _image_grad_yy));
 	}
 
 	cv::Mat image_32fc1;

@@ -6,7 +6,6 @@
 #include "ImageCurvatureCalcurator.h"
 #include "PixelNode.h"
 
-
 std::string PARENT_DIR = getParentDir();
 
 int main(int argc, char **argv)
@@ -16,10 +15,11 @@ int main(int argc, char **argv)
     cv::cvtColor(rgb_image, gray_image, cv::COLOR_RGB2GRAY);
 
     ImageCurvatureCalcurator curvature_calcurtor;
-    cv::Mat image_curvature = curvature_calcurtor(gray_image);
+    curvature_calcurtor.calcurate(gray_image);
+    cv::Mat image_curvature = curvature_calcurtor.get();
 
     // dump image
-    std::string dir_name = concatDirectoryAndDataNames(PARENT_DIR, "output");    
+    std::string dir_name = concatDirectoryAndDataNames(PARENT_DIR, "output");
     std::string data_save_name = "curvature.yml";
     mkdir(dir_name);
     std::string save_path_str = concatDirectoryAndDataNames(dir_name, data_save_name);
