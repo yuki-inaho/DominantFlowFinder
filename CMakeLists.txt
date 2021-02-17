@@ -8,6 +8,8 @@ add_executable(
     src/main.cpp
 )
 
+#set(CMAKE_BUILD_TYPE Debug)
+#set(CMAKE_CXX_FLAGS "-O0 -std=c++11")
 set(CMAKE_CXX_FLAGS "-O3 -std=c++11")
 
 include_directories(include)
@@ -16,3 +18,5 @@ find_package(PkgConfig REQUIRED)
 pkg_check_modules(OpenCV REQUIRED opencv)
 include_directories(${OpenCV_CFLAGS})
 target_link_libraries(${PROJ_NAME} ${OpenCV_LDFLAGS})
+
+target_link_libraries(${PROJ_NAME} stdc++fs)
