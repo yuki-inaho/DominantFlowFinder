@@ -10,12 +10,26 @@ class PixelNode {
             _pos_neighbor_highest_curvature = pos_neighbor_highest_curvature;
             _curvature = curvature;
             _image_size = image_size;
-            _hash = position2hash(_pos, _image_size);
+            _hash = position2hash(_pos, _image_size); // index = _hash
+
+            rank = 0;
+            parent = NULL;
+            children.clear();
+
+        }
+
+        size_t hash(){
+            return _hash;
         }
 
         float get_curvature(){
             return _curvature;
         }
+
+        int index;
+        int rank;
+        PixelNode * parent;
+        std::set <PixelNode * > children;
 
     private:
         Position2D _pos;
@@ -24,14 +38,4 @@ class PixelNode {
         int32_t _hash;
         float _curvature;
 
-        int index;
-        int rank;
-        PixelNode * parent;
-        std::set <PixelNode * > children;
-        PixelNode(int idx) {
-            index = idx;
-            rank = 0;
-            parent = NULL;
-            children.clear();
-        }
 };
