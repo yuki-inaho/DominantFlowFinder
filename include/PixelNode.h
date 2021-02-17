@@ -5,15 +5,21 @@
 
 class PixelNode {
     public:
-        PixelNode(Position2D pos, ImageSize image_size, float curvature){
+        PixelNode(Position2D pos, Position2D pos_neighbor_highest_curvature, ImageSize image_size, float curvature){
             _pos = pos;
+            _pos_neighbor_highest_curvature = pos_neighbor_highest_curvature;
             _curvature = curvature;
             _image_size = image_size;
             _hash = position2hash(_pos, _image_size);
         }
 
+        float get_curvature(){
+            return _curvature;
+        }
+
     private:
         Position2D _pos;
+        Position2D _pos_neighbor_highest_curvature;
         ImageSize _image_size;
         int32_t _hash;
         float _curvature;
