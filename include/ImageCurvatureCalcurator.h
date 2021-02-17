@@ -1,3 +1,4 @@
+#pragma once
 #include <opencv2/opencv.hpp>
 #include <iostream>
 #include "operator.h"
@@ -68,14 +69,12 @@ private:
 		// https://pdfs.semanticscholar.org/b465/c476e3e7f607c01160538bc2f2a25663286e.pdf
 
 		cv::Mat E = cv::Mat::ones(_image_grad_x.size(), _image_grad_x.type());
-		cv::Mat two_E = 2 * E.clone();
-
-		cv::Mat numerator_mat = 	elem_mul(
+		cv::Mat numerator_mat = elem_mul(
 									(E + elem_mul(_image_grad_x, _image_grad_x)),
 									_image_grad_yy
 								)
 							-	elem_mul(
-									two_E,				
+									2 * E,				
 									elem_mul(
 										_image_grad_x,
 										elem_mul(_image_grad_y, _image_grad_xy)
@@ -92,7 +91,7 @@ private:
 			3.0/2,
 			denom_tmp
 		);
-		cv::Mat denominator_mat = elem_mul(two_E, denom_tmp) + E * 10e-8;
+		cv::Mat denominator_mat = elem_mul(2 * E, denom_tmp) + E * 10e-8;
 		_image_curvature = elem_div(numerator_mat, denominator_mat);
 	}
 
