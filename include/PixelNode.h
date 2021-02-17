@@ -15,7 +15,31 @@ class PixelNode {
             rank = 0;
             parent = NULL;
             children.clear();
+        }
 
+        bool operator ==(const PixelNode &node) const
+        {
+            return _curvature == node._curvature;
+        }
+
+        bool operator <(const PixelNode &node) const
+        {
+            return _curvature < node._curvature;
+        }
+
+        bool operator >(const PixelNode &node) const
+        {
+            return _curvature > node._curvature;
+        }
+
+        bool operator <=(const PixelNode &node) const
+        {
+            return _curvature <= node._curvature;
+        }
+
+        bool operator >=(const PixelNode &node) const
+        {
+            return _curvature >= node._curvature;
         }
 
         size_t hash(){
