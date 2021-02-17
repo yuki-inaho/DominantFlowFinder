@@ -1,7 +1,6 @@
 #pragma once
 #include <set>
 
-
 struct Node {
     int index;
     int rank;

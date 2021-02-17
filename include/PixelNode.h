@@ -1,15 +1,23 @@
 #pragma once
 #include <set>
-
-typedef std::pair<int32_t, int32_t> Position2D;
+#include "struct.h"
+#include "convert.h"
 
 class PixelNode {
     public:
-        Position2D pos;
-        int32_t hash;
-        float curvature;
+        PixelNode(Position2D pos, ImageSize image_size, float curvature){
+            _pos = pos;
+            _curvature = curvature;
+            _image_size = image_size;
+            _hash = position2hash(_pos, _image_size);
+        }
 
     private:
+        Position2D _pos;
+        ImageSize _image_size;
+        int32_t _hash;
+        float _curvature;
+
         int index;
         int rank;
         PixelNode * parent;
