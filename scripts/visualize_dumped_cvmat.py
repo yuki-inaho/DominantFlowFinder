@@ -18,8 +18,8 @@ def main(input_xml):
     image_curvature = cv_file.getNode("mat").mat()
     imgplot = plt.imshow(image_curvature)
     imgplot.set_cmap("nipy_spectral")
-    plt.show()
-
+    #plt.show()
+    plt.savefig("../curvature.png")
 
 if __name__ == "__main__":
     args = parse_args()
