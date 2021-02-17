@@ -2,3 +2,4 @@
 build/
 output/
 pyproject.toml
+scripts/__pycache__

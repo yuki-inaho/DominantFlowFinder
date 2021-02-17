@@ -20,7 +20,7 @@ int main(int argc, char **argv)
 
     // dump image
     std::string dir_name = concatDirectoryAndDataNames(PARENT_DIR, "output");
-    std::string data_save_name = "curvature.yml";
+    std::string data_save_name = "curvature.xml";
     mkdir(dir_name);
     std::string save_path_str = concatDirectoryAndDataNames(dir_name, data_save_name);
     dumpCVMat(save_path_str, image_curvature);
