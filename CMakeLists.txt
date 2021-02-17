@@ -15,6 +15,7 @@ set(CMAKE_CXX_FLAGS "-Ofast -std=c++11")
 
 include_directories(include)
 find_package(PkgConfig REQUIRED)
+#find_package(Boost COMPONENTS bimap REQUIRED)
 
 pkg_check_modules(OpenCV REQUIRED opencv)
 include_directories(${OpenCV_CFLAGS})

@@ -16,7 +16,7 @@ struct ParsedArgument{
 };
 
 ParsedArgument parse_args(int argc, char **argv){
-    argparse::ArgumentParser parser("dominant_flow_finder", "Calcurate dominant flow", "MIT");
+    argparse::ArgumentParser parser("dominant_flow_finder", "Calcurate dominant flow", "MIT License");
     parser.addArgument({"--save-image-curvature", "-s"}, "flag", argparse::ArgumentType::StoreTrue);
     auto args = parser.parseArgs(argc, argv);
     bool save_image_curvature = args.has("save-image-curvature");
@@ -44,6 +44,7 @@ int main(int argc, char **argv)
     CuvatureExtremaFinder curvature_extrema_finder;
     curvature_extrema_finder.set_curvature_image(image_curvature);
     curvature_extrema_finder.initialize_pixel_nodes();
+    curvature_extrema_finder.set_curvature_order_information();
 
     end = std::chrono::system_clock::now(); // 計測開始時間
     double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count(); //処理に要した時間をミリ秒に変換
