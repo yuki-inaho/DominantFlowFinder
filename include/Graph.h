@@ -1,70 +1,72 @@
 #pragma once
-#include "PixelNode.h"
+
 #include <vector>
 #include <map>
 #include <set>
 #include <stack>
+#include "typedef.h"
+#include "PixelNode.h"
 
 // TODO: Use shared pointer
 
-/*
-typedef size_t NodeHash;
-
 struct Graph
 {
-    std::vector<NodeHash> nodes;
     // TODO: rename M so as to more descriptive
-    std::map <int32_t, NodeHash> M;
+    std::set<NodeHash> nodes;
     Graph()
     {
-        M.clear();        
         nodes.clear();
     }
 
-    PixelNode *get_root(PixelNode *node)
+    NodeHash get_root(NodeHash hash, std::vector<PixelNode> &node_list)
     {
-
-        if (node->parent != NULL)
+        if (node_list[hash].parent() != UNDEFINED)
         {
-            node->parent->children.erase(node);
-            node->parent = get_root(node->parent);
-            node->parent->children.insert(node);
-            return node->parent;
+            // TODO: simplify
+            NodeHash parent_hash = node_list[hash].parent();
+            //std::cout << hash << " " << parent_hash << std::endl;
+            NodeHash root_hash = get_root(parent_hash, node_list);
+            node_list[parent_hash].set_parent(root_hash);
+            return parent_hash;
         }
         else
         {
-            return node;
+            return hash;
         }
+       return hash;
     }
 
     void add_node(NodeHash hash)
     {
-        nodes.push_back(new PixelNode(idx));
-        M[idx] = nodes[nodes.size() - 1];
+        nodes.insert(hash);
     }
 
-    void add_edge(int n1, int n2)
+    void add_edge(NodeHash n1, NodeHash n2, std::vector<PixelNode> &node_list)
     {
-        PixelNode *r1 = get_root(M[n1]);
-        PixelNode *r2 = get_root(M[n2]);
+        std::cout << "test3" << std::endl;
+        NodeHash r1 = get_root(n1, node_list);
+        NodeHash r2 = get_root(n2, node_list);
+        //std::cout << "(" << n1 << "," << n2 << ")" << " " << "(" << r1 << "," << r2 << ")" << std::endl;
+        std::cout << "test4" << std::endl;
+
         if (r1 != r2)
         {
-            if (r1->rank > r2->rank)
+            if (node_list[r1].rank > node_list[r2].rank)
             {
-                r2->parent = r1;
-                r1->children.insert(r2);
+                node_list[r2].set_parent(r1);
+                //node_list[r1].children.insert(r2);
             }
             else
             {
-                r1->parent = r2;
-                r2->children.insert(r1);
-                if (r1->rank == r2->rank)
+                node_list[r1].set_parent(r2);
+                //node_list[r1].parent = r2;
+                //node_list[r2].children.insert(r1);
+
+                if (node_list[r1].rank == node_list[r2].rank)
                 {
-                    r2->rank++;
+                    node_list[r2].rank++;
                 }
             }
         }
     }
-
 };
-*/

@@ -29,12 +29,17 @@ void dumpCVMat(std::string name, const cv::Mat &image)
 };
 
 template <typename T>
-std::vector<size_t> argsort(std::vector<T> sequence){
+std::vector<size_t> argsort(std::vector<T> sequence, bool ascending=false){
     std::vector<size_t> indices(sequence.size());    
     std::iota(indices.begin(), indices.end(), 0);
-
-    std::sort(indices.begin(), indices.end(), [&sequence](size_t i1, size_t i2) {
-        return sequence[i1] < sequence[i2];
-    });
+    if(ascending){
+        std::sort(indices.begin(), indices.end(), [&sequence](size_t i1, size_t i2) {
+            return sequence[i1] < sequence[i2];
+        });
+    }else{
+        std::sort(indices.begin(), indices.end(), [&sequence](size_t i1, size_t i2) {
+            return sequence[i1] > sequence[i2];
+        });
+    }
     return indices;
 }

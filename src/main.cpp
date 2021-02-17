@@ -45,6 +45,12 @@ int main(int argc, char **argv)
     curvature_extrema_finder.set_curvature_image(image_curvature);
     curvature_extrema_finder.initialize_pixel_nodes();
     curvature_extrema_finder.set_curvature_order_information();
+    curvature_extrema_finder.set_graph();
+    /*
+    cv::Mat extrema_image = curvature_extrema_finder.get_extrema_image();
+    cv::imwrite("../extrema.png", extrema_image);
+    cv::waitKey(10);
+    */
 
     end = std::chrono::system_clock::now(); // 計測開始時間
     double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count(); //処理に要した時間をミリ秒に変換

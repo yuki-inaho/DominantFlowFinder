@@ -5,6 +5,10 @@ struct Position2D
 {
     int32_t x;
     int32_t y;
+    bool operator ==(const Position2D &pos) const
+    {
+        return (pos.x == x) & (pos.y == y);
+    }
 };
 
 struct ImageSize
