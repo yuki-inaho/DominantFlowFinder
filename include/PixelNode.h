@@ -148,6 +148,9 @@ public:
 
     NodeHash parent()
     {
+        if(!has_parent()){
+            std::cout << "[WARNING] This node has its parent, but the node tries to call it." << std::endl;
+        }
         return _parent;
     }
 

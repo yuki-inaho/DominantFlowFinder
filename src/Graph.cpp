@@ -9,8 +9,9 @@ NodeHash Graph::get_root(NodeHash hash, std::vector<NodeMock> &node_list)
         // TODO: simplify
         NodeHash parent_hash = node_list[hash].parent();
         NodeHash root_hash = get_root(parent_hash, node_list);
-        node_list[parent_hash].set_parent(root_hash);
-        return parent_hash;
+        node_list[hash].set_parent(root_hash);
+        parent_hash = node_list[hash].parent();
+        return root_hash;
     }
     else
     {
@@ -43,6 +44,7 @@ void Graph::add_edge(NodeHash n1, NodeHash n2, std::vector<NodeMock> &node_list)
             }
         }
     }
+    num_edges = num_edges + 1;
 }
 
 template <>
@@ -87,9 +89,11 @@ void Graph::add_edge(NodeHash n1, NodeHash n2, std::vector<PixelNode> &node_list
             }
         }
     }
+    num_edges = num_edges + 1;
 }
 
 void Graph::add_node(NodeHash hash)
 {
     m_nodes.insert(hash);
+    num_nodes = num_nodes + 1;
 }
