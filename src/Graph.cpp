@@ -3,7 +3,7 @@
 template <>
 NodeHash Graph::get_root(NodeHash hash, std::vector<NodeMock> &node_list)
 {
-    if (node_list[hash].parent() != UNDEFINED)
+    if (node_list[hash].parent() != hash)
     {
         // TODO: simplify
         NodeHash parent_hash = node_list[hash].parent();

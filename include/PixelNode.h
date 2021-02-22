@@ -6,7 +6,6 @@
 #include "struct.h"
 #include "convert.h"
 
-#define UNDEFINED std::numeric_limits<size_t>::max()
 
 class NodeMock
 {
@@ -81,7 +80,7 @@ public:
 
     bool has_parent()
     {
-        return _parent != UNDEFINED;
+        return _parent != _hash;
     }
 
     bool has_children()
@@ -182,7 +181,7 @@ public:
 
     bool has_parent()
     {
-        return _parent != UNDEFINED;
+        return _parent != _hash;
     }
 
     bool has_children()

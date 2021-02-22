@@ -6,7 +6,7 @@ NodeMock::NodeMock(const size_t hash, const float &value)
 {
     _hash = hash;
     rank = 0;
-    set_parent(UNDEFINED);
+    set_parent(_hash);
     children.clear();
 }
 
@@ -20,6 +20,6 @@ PixelNode::PixelNode(const Position2D &pos, const Position2D &pos_neighbor_highe
     _is_extrema = pos == _pos_neighbor_highest_curvature ? true : false;
 
     rank = 0;
-    set_parent(UNDEFINED);
+    set_parent(_hash);
     children.clear();
 }
