@@ -116,22 +116,22 @@ public:
         for (size_t i = 0; i < _image_size.width * _image_size.height; i++)
         {
             // TODO: naming, hash? index?
-            //size_t index_curvature_order = _map_standard_index_to_curvarture_order_index[i];
+            size_t index_curvature_order = _map_standard_index_to_curvarture_order_index[i];
 
             // TODO: write test
             //std::cout << index_curvature_order << " " << _pixel_node_list[index_curvature_order].hash() << std::endl;
-            //_G.add_node(index_curvature_order);
-            _G.add_node(i);
-            //size_t index_neighbor = _pixel_node_list[index_curvature_order].get_hash_of_neighbor_node_highest_curvature();
-            size_t index_neighbor = _pixel_node_list[i].get_hash_of_neighbor_node_highest_curvature();
-            /*
-            if _pixel_node_list[i].get
-            [i] < _pixel_node_list[i] if (_G.nodes.count(i) > 0)
+            _G.add_node(index_curvature_order);
+            if (!_pixel_node_list[index_curvature_order].is_extrema())
+                continue;
+            size_t index_neighbor = _pixel_node_list[index_curvature_order].get_hash_of_neighbor_node_highest_curvature();
+            if (_G.m_nodes.count(index_neighbor) > 0)
             {
-                std::cout << index_neighbor << " " << index_curvature_order << std::endl;
+                _G.add_edge(index_neighbor, index_curvature_order, _pixel_node_list);
             }
-            */
         }
+
+        std::cout << "num_nodes:" << _G.num_nodes << std::endl;
+        std::cout << "num_edges:" << _G.num_edges << std::endl;
     }
 
     cv::Mat get_extrema_image()

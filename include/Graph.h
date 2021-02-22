@@ -1,5 +1,7 @@
 #pragma once
 
+//TODO: Remove duplicated children
+
 #include <vector>
 #include <map>
 #include <set>

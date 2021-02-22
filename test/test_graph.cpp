@@ -59,7 +59,6 @@ TEST(GraphTest, AddEdgeLarge)
         node_list.push_back(node);
     }
 
-
     for (size_t i = 0; i < n_node; i++){
         G.add_node(i);
         if(node_list[i].has_parent())
