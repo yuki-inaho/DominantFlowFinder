@@ -7,84 +7,179 @@
 #include "convert.h"
 
 #define UNDEFINED std::numeric_limits<size_t>::max()
-class PixelNode {
-    public:
-        PixelNode(){
-            // nothing
-        }
-        
-        PixelNode(const Position2D& pos, const Position2D& pos_neighbor_highest_curvature, const ImageSize& image_size, const float& curvature){
-            _pos = pos;
-            _pos_neighbor_highest_curvature = pos_neighbor_highest_curvature;
-            _curvature = curvature;
-            _image_size = image_size;
-            _hash = position2hash(_pos, _image_size); // index = _hash
-            _is_extrema = pos == _pos_neighbor_highest_curvature ? true : false;
 
-            rank = 0;
-            set_parent(UNDEFINED);
-            children.clear();
-        }
+class NodeMock
+{
+public:
+    NodeMock()
+    {
+        // nothing
+    }
 
-        bool operator ==(const PixelNode &node) const
-        {
-            return _curvature == node._curvature;
-        }
+    /*
+    NodeMock(const size_t hash, const float &value)
+    {
+        _hash = hash;
+        rank = 0;
+        set_parent(UNDEFINED);
+        children.clear();
+    }
+    */
+    NodeMock(const size_t hash, const float &value);
 
-        bool operator <(const PixelNode &node) const
-        {
-            return _curvature < node._curvature;
-        }
+    bool operator==(const NodeMock &node) const
+    {
+        return _value == node._value;
+    }
 
-        bool operator >(const PixelNode &node) const
-        {
-            return _curvature > node._curvature;
-        }
+    bool operator<(const NodeMock &node) const
+    {
+        return _value < node._value;
+    }
 
-        bool operator <=(const PixelNode &node) const
-        {
-            return _curvature <= node._curvature;
-        }
+    bool operator>(const NodeMock &node) const
+    {
+        return _value > node._value;
+    }
 
-        bool operator >=(const PixelNode &node) const
-        {
-            return _curvature >= node._curvature;
-        }
+    bool operator<=(const NodeMock &node) const
+    {
+        return _value <= node._value;
+    }
 
-        size_t hash(){
-            return _hash;
-        }
+    bool operator>=(const NodeMock &node) const
+    {
+        return _value >= node._value;
+    }
 
-        float get_curvature(){
-            return _curvature;
-        }
+    size_t hash()
+    {
+        return _hash;
+    }
 
-        float get_hash_of_neighbor_node_highest_curvature(){
-            return position2hash(_pos_neighbor_highest_curvature, _image_size);
-        }
+    NodeHash parent()
+    {
+        return _parent;
+    }
 
-        bool is_extrema(){
-            return _is_extrema;
-        }
+    void set_parent(const NodeHash &parent_hash)
+    {
+        _parent = parent_hash;
+    }
 
-        NodeHash parent(){
-            return _parent;
-        }
+    void add_children(const NodeHash &child_hash)
+    {
+        children.insert(child_hash);
+    }
 
-        void set_parent(const NodeHash& parent_hash){
-            _parent = parent_hash;
-        }
+    bool has_parent()
+    {
+        return _parent != UNDEFINED;
+    }
 
-        int32_t rank;
-        std::set<NodeHash> children;
-        bool _is_extrema;
+    bool has_children()
+    {
+        return children.size() > 0;
+    }
 
-    private:
-        Position2D _pos;
-        Position2D _pos_neighbor_highest_curvature;
-        ImageSize _image_size;
-        NodeHash _hash;
-        NodeHash _parent;
-        float _curvature;
+    int32_t rank;
+    std::set<NodeHash> children;
 
+private:
+    NodeHash _hash;
+    NodeHash _parent;
+    float _value;
+};
+
+class PixelNode
+{
+public:
+    PixelNode()
+    {
+        // nothing
+    }
+
+    PixelNode(const Position2D &pos, const Position2D &pos_neighbor_highest_curvature, const ImageSize &image_size, const float &curvature);
+
+    bool operator==(const PixelNode &node) const
+    {
+        return _curvature == node._curvature;
+    }
+
+    bool operator<(const PixelNode &node) const
+    {
+        return _curvature < node._curvature;
+    }
+
+    bool operator>(const PixelNode &node) const
+    {
+        return _curvature > node._curvature;
+    }
+
+    bool operator<=(const PixelNode &node) const
+    {
+        return _curvature <= node._curvature;
+    }
+
+    bool operator>=(const PixelNode &node) const
+    {
+        return _curvature >= node._curvature;
+    }
+
+    size_t hash()
+    {
+        return _hash;
+    }
+
+    float get_curvature()
+    {
+        return _curvature;
+    }
+
+    float get_hash_of_neighbor_node_highest_curvature()
+    {
+        return position2hash(_pos_neighbor_highest_curvature, _image_size);
+    }
+
+    bool is_extrema()
+    {
+        return _is_extrema;
+    }
+
+    NodeHash parent()
+    {
+        return _parent;
+    }
+
+    void set_parent(const NodeHash &parent_hash)
+    {
+        _parent = parent_hash;
+    }
+
+    void add_children(const NodeHash &child_hash)
+    {
+        children.insert(child_hash);
+    }
+
+    bool has_parent()
+    {
+        return _parent != UNDEFINED;
+    }
+
+    bool has_children()
+    {
+        return children.size() > 0;
+    }
+
+    int32_t rank;
+    std::set<NodeHash> children;
+    bool _is_extrema;
+
+private:
+    Position2D _pos;
+    Position2D _pos_neighbor_highest_curvature;
+    ImageSize _image_size;
+    NodeHash _hash;
+    NodeHash _parent;
+    float _curvature;
 };

@@ -15,9 +15,11 @@ public:
         m_nodes.clear();
     }
 
-    NodeHash get_root(NodeHash hash, std::vector<PixelNode> &node_list);
+    template <typename Node>
+    NodeHash get_root(NodeHash hash, std::vector<Node> &node_list);
     void add_node(NodeHash hash);
-    void add_edge(NodeHash n1, NodeHash n2, std::vector<PixelNode> &node_list);
+    template <typename Node>
+    void add_edge(NodeHash n1, NodeHash n2, std::vector<Node> &node_list);
 
     std::set<NodeHash> m_nodes;
 };
