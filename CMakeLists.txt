@@ -25,11 +25,14 @@ include_directories(${OpenCV_CFLAGS})
 target_link_libraries(${PROJ_NAME} ${OpenCV_LDFLAGS})
 target_link_libraries(${PROJ_NAME} stdc++fs)
 
-add_subdirectory(test)
-add_library(
-    Graph STATIC
-    src/Graph.cpp
-    src/PixelNode.cpp
-    src/convert.cpp
-)
-target_link_libraries(Graph ${OpenCV_LDFLAGS})
+set(BUILD_TEST FALSE)
+if(BUILD_TEST)
+    add_subdirectory(test)
+    add_library(
+        Graph STATIC
+        src/Graph.cpp
+        src/PixelNode.cpp
+        src/convert.cpp
+    )
+    target_link_libraries(Graph ${OpenCV_LDFLAGS})
+endif()
