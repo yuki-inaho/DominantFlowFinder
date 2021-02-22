@@ -4,6 +4,7 @@
 
 #include "argparse.hpp"
 #include "util.h"
+#include "struct.h"
 #include "Graph.h"
 #include "ImageCurvatureCalcurator.h"
 #include "CuvatureExtremaFinder.h"
@@ -45,7 +46,10 @@ int main(int argc, char **argv)
     curvature_extrema_finder.set_curvature_image(image_curvature);
     curvature_extrema_finder.initialize_pixel_nodes();
     curvature_extrema_finder.set_curvature_order_information();
+    //std::vector<Position2D> extrema_pos_list = curvature_extrema_finder.get_extrema_position2D_list();
+    //cv::Mat image_extrema = drawExtremaPoints(rgb_image_resized, extrema_pos_list);
     curvature_extrema_finder.set_graph();
+    
     /*
     cv::Mat extrema_image = curvature_extrema_finder.get_extrema_image();
     cv::imwrite("../extrema.png", extrema_image);
@@ -66,6 +70,7 @@ int main(int argc, char **argv)
         dumpCVMat(save_path_str, image_curvature);
     }
 
+    //cv::imwrite("../extrema.png", image_extrema);
     cv::imwrite("../gray.png", gray_image);
     return 0;
 }

@@ -1,8 +1,10 @@
 #pragma once
+
 #include <iostream>
 #include <algorithm>
 #include <opencv2/opencv.hpp>
 #include <unordered_map>
+#include "Graph.h"
 #include "typedef.h"
 #include "PixelNode.h"
 #include "struct.h"
@@ -21,8 +23,10 @@ public:
     {
         _pixel_node_list = std::vector<PixelNode>(_image_size.width * _image_size.height, PixelNode());
 
-        for(size_t y=0; y < _image_size.height; y++){
-            for(size_t x=0; x < _image_size.width; x++){
+        for (size_t y = 0; y < _image_size.height; y++)
+        {
+            for (size_t x = 0; x < _image_size.width; x++)
+            {
                 Position2D pos_2d = {x, y};
                 size_t hash = position2hash(pos_2d, _image_size);
                 Position2D pos_neighbor_highest_curvature = _search_relative_high_curvature_position(pos_2d);
@@ -30,7 +34,7 @@ public:
                 float curvature = _curvature_image.at<float>(y, x);
                 PixelNode node = PixelNode(pos_2d, pos_neighbor_highest_curvature, _image_size, curvature);
 
-                _pixel_node_list[hash] = node;                
+                _pixel_node_list[hash] = node;
             }
         }
 
@@ -87,35 +91,61 @@ public:
         */
     }
 
+    std::vector<Position2D> get_extrema_position2D_list()
+    {
+        std::vector<Position2D> extrema_pos_list;
+        for (size_t y = 0; y < _image_size.height; y++)
+        {
+            for (size_t x = 0; x < _image_size.width; x++)
+            {
+                Position2D pos_2d = {x, y};
+                size_t hash = position2hash(pos_2d, _image_size);
+                if (_pixel_node_list[hash].is_extrema())
+                {
+                    extrema_pos_list.push_back(pos_2d);
+                }
+            }
+        }
+
+        return extrema_pos_list;
+    }
+
     void set_graph()
     {
         _G = Graph();
         for (size_t i = 0; i < _image_size.width * _image_size.height; i++)
         {
             // TODO: naming, hash? index?
-            size_t index_curvature_order = _map_standard_index_to_curvarture_order_index[i];
-            
+            //size_t index_curvature_order = _map_standard_index_to_curvarture_order_index[i];
+
             // TODO: write test
             //std::cout << index_curvature_order << " " << _pixel_node_list[index_curvature_order].hash() << std::endl;
-            _G.add_node(index_curvature_order);
-            size_t index_neighbor = _pixel_node_list[index_curvature_order].get_hash_of_neighbor_node_highest_curvature();
-            if (_G.nodes.count(index_curvature_order) > 0)
+            //_G.add_node(index_curvature_order);
+            _G.add_node(i);
+            //size_t index_neighbor = _pixel_node_list[index_curvature_order].get_hash_of_neighbor_node_highest_curvature();
+            size_t index_neighbor = _pixel_node_list[i].get_hash_of_neighbor_node_highest_curvature();
+            /*
+            if _pixel_node_list[i].get
+            [i] < _pixel_node_list[i] if (_G.nodes.count(i) > 0)
             {
-                std::cout << "test1" << std::endl;
-                _G.add_edge(index_neighbor, index_curvature_order, _pixel_node_list);
-                std::cout << "test2" << std::endl;
+                std::cout << index_neighbor << " " << index_curvature_order << std::endl;
             }
+            */
         }
     }
 
-    cv::Mat get_extrema_image(){
+    cv::Mat get_extrema_image()
+    {
         cv::Mat extrema_images = cv::Mat::zeros(cv::Size(_image_size.width, _image_size.height), CV_8UC1);
 
-        for(size_t y=0; y < _image_size.height; y++){
-            for(size_t x=0; x < _image_size.width; x++){
-                Position2D _pos = {x, y};                
-                if(_pixel_node_list[position2hash(_pos, _image_size)].is_extrema()){
-                    extrema_images.at<uchar>(y,x) = 255;
+        for (size_t y = 0; y < _image_size.height; y++)
+        {
+            for (size_t x = 0; x < _image_size.width; x++)
+            {
+                Position2D _pos = {x, y};
+                if (_pixel_node_list[position2hash(_pos, _image_size)].is_extrema())
+                {
+                    extrema_images.at<uchar>(y, x) = 255;
                 }
             }
         }
@@ -136,13 +166,14 @@ private:
     {
         float max_curvature = std::numeric_limits<float>::min();
         Position2D pos_neighbor_relative_high_curvature = center;
-        
+
         for (int32_t k_y = -kernel_size / 2; k_y <= kernel_size / 2; k_y++)
         {
             for (int32_t k_x = -kernel_size / 2; k_x <= kernel_size / 2; k_x++)
             {
                 Position2D neighbor_pos = {center.x + k_x, center.y + k_y};
-                if(neighbor_pos.x < 0 || neighbor_pos.y < 0 || neighbor_pos.x >= _image_size.width || neighbor_pos.y >= _image_size.height){
+                if (neighbor_pos.x < 0 || neighbor_pos.y < 0 || neighbor_pos.x >= _image_size.width || neighbor_pos.y >= _image_size.height)
+                {
                     continue;
                 }
                 float curvature_neighbor = _curvature_image.at<float>(neighbor_pos.y, neighbor_pos.x);
@@ -163,5 +194,5 @@ private:
     std::vector<StandardIndex> _map_curvarture_order_index_to_standard_index;
     cv::Mat _curvature_image;
     ImageSize _image_size;
-    Graph _G;    
+    Graph _G;
 };

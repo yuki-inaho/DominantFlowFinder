@@ -19,6 +19,7 @@ class PixelNode {
             _curvature = curvature;
             _image_size = image_size;
             _hash = position2hash(_pos, _image_size); // index = _hash
+            _is_extrema = pos == _pos_neighbor_highest_curvature ? true : false;
 
             rank = 0;
             set_parent(UNDEFINED);
@@ -63,7 +64,7 @@ class PixelNode {
         }
 
         bool is_extrema(){
-            return _pos == _pos_neighbor_highest_curvature;
+            return _is_extrema;
         }
 
         NodeHash parent(){
@@ -76,6 +77,7 @@ class PixelNode {
 
         int32_t rank;
         std::set<NodeHash> children;
+        bool _is_extrema;
 
     private:
         Position2D _pos;

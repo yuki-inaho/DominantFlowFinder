@@ -1,7 +1,9 @@
 #pragma once
+
 #include <opencv2/opencv.hpp>
 #include <experimental/filesystem>
 #include <numeric>
+#include "struct.h"
 
 namespace fs = std::experimental::filesystem ;
 
@@ -16,6 +18,16 @@ std::string getParentDir(){
     // assume executive file is exist on {ParentDIR}/build
     fs::path parent_dir_path = fs::canonical("..");    
     return parent_dir_path.string<char>(); 
+}
+
+cv::Mat drawExtremaPoints(cv::Mat &image, std::vector<Position2D> extrema_pos_list){
+    cv::Mat image_extrema = image.clone();
+    int32_t n_extrema = extrema_pos_list.size();
+    for(size_t i = 0; i < n_extrema; i++){
+        cv::Point cv_point(extrema_pos_list[i].x, extrema_pos_list[i].y);
+        cv::circle(image_extrema, cv_point, 1, cv::Scalar(255,0,0), 1);
+    }
+    return image_extrema;
 }
 
 bool mkdir(std::string dir_name){

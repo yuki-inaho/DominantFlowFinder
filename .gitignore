@@ -3,3 +3,6 @@ build/
 output/
 pyproject.toml
 scripts/__pycache__
+gray.png
+extrema.png
+curvature.png
