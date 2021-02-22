@@ -10,6 +10,7 @@
 #include "struct.h"
 #include "util.h"
 
+
 class CuvatureExtremaFinder
 {
 public:
@@ -130,8 +131,10 @@ public:
             }
         }
 
+        /*
         std::cout << "num_nodes:" << _G.num_nodes << std::endl;
         std::cout << "num_edges:" << _G.num_edges << std::endl;
+        */
     }
 
     cv::Mat get_extrema_image()
@@ -151,6 +154,12 @@ public:
         }
         return extrema_images;
     }
+
+    ImageSize get_image_size(){
+        return _image_size;
+    }
+
+    std::vector<PixelNode> _pixel_node_list; // public for debug
 
 private:
     void _set_image_size(const cv::Mat &image)
@@ -187,7 +196,6 @@ private:
         return pos_neighbor_relative_high_curvature;
     }
 
-    std::vector<PixelNode> _pixel_node_list;
 
     // TODO: rethink data structure
     std::vector<CurvatureOrderIndex> _map_standard_index_to_curvarture_order_index;
@@ -195,4 +203,28 @@ private:
     cv::Mat _curvature_image;
     ImageSize _image_size;
     Graph _G;
+};
+
+
+cv::Mat drawAbstructedImage(const cv::Mat &image, CuvatureExtremaFinder& cef)
+{
+    cv::Mat image_abstructed = image.clone();
+    const ImageSize image_size = cef.get_image_size();
+
+    for (size_t y = 0; y < image_size.height; y++)
+    {
+        for (size_t x = 0; x < image_size.width; x++)
+        {
+            Position2D pos = {x, y};
+            NodeHash hash = position2hash(pos, image_size);
+            const NodeHash hash_extrema = cef._pixel_node_list[hash].parent();
+            const Position2D pos_extrema = cef._pixel_node_list[hash_extrema].position();
+            int32_t x_abs = pos_extrema.x;
+            int32_t y_abs = pos_extrema.y;
+            std::cout << x_abs << " " << y_abs << std::endl;
+            image_abstructed.at<cv::Vec3b>(y,x) = image_abstructed.at<cv::Vec3b>(y_abs,x_abs);
+        }
+    }
+
+    return image_abstructed;
 };

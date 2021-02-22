@@ -42,8 +42,8 @@ void Graph::add_edge(NodeHash n1, NodeHash n2, std::vector<NodeMock> &node_list)
                 node_list[r2].rank++;
             }
         }
+        num_edges = num_edges + 1;        
     }
-    num_edges = num_edges + 1;
 }
 
 template <>

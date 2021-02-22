@@ -7,7 +7,7 @@
 #include "struct.h"
 #include "Graph.h"
 #include "ImageCurvatureCalcurator.h"
-#include "CuvatureExtremaFinder.h"
+#include "CurvatureExtremaFinder.h"
 #include "PixelNode.h"
 
 std::string PARENT_DIR = getParentDir();
@@ -70,6 +70,8 @@ int main(int argc, char **argv)
         dumpCVMat(save_path_str, image_curvature);
     }
 
+    //cv::Mat image_abstructed = drawAbstructedImage(rgb_image_resized, curvature_extrema_finder);
+    //cv::imwrite("../abstructed.png", image_abstructed);
     //cv::imwrite("../extrema.png", image_extrema);
     cv::imwrite("../gray.png", gray_image);
     return 0;

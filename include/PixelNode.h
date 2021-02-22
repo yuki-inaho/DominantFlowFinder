@@ -146,6 +146,11 @@ public:
         return _is_extrema;
     }
 
+    Position2D position()
+    {
+        return _pos;
+    }
+
     NodeHash parent()
     {
         return _parent;
