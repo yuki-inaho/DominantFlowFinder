@@ -59,7 +59,14 @@ public:
 
     NodeHash parent()
     {
-        return _parent;
+        if (has_parent())
+        {
+            return _parent;
+        }
+        else
+        {
+            return _hash;
+        }
     }
 
     void set_parent(const NodeHash &parent_hash)
@@ -153,7 +160,14 @@ public:
 
     NodeHash parent()
     {
-        return _parent;
+        if (has_parent())
+        {
+            return _parent;
+        }
+        else
+        {
+            return _hash;
+        }
     }
 
     void set_parent(const NodeHash &parent_hash)

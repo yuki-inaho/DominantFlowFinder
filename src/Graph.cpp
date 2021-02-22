@@ -42,14 +42,14 @@ void Graph::add_edge(NodeHash n1, NodeHash n2, std::vector<NodeMock> &node_list)
                 node_list[r2].rank++;
             }
         }
-        num_edges = num_edges + 1;        
+        num_edges = num_edges + 1;
     }
 }
 
 template <>
 NodeHash Graph::get_root(NodeHash hash, std::vector<PixelNode> &node_list)
 {
-    if (node_list[hash].parent() != UNDEFINED)
+    if (node_list[hash].parent() != hash)
     {
         // TODO: simplify
         NodeHash parent_hash = node_list[hash].parent();

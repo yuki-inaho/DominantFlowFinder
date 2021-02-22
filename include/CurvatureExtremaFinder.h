@@ -10,7 +10,6 @@
 #include "struct.h"
 #include "util.h"
 
-
 class CuvatureExtremaFinder
 {
 public:
@@ -155,7 +154,8 @@ public:
         return extrema_images;
     }
 
-    ImageSize get_image_size(){
+    ImageSize get_image_size()
+    {
         return _image_size;
     }
 
@@ -196,7 +196,6 @@ private:
         return pos_neighbor_relative_high_curvature;
     }
 
-
     // TODO: rethink data structure
     std::vector<CurvatureOrderIndex> _map_standard_index_to_curvarture_order_index;
     std::vector<StandardIndex> _map_curvarture_order_index_to_standard_index;
@@ -206,7 +205,7 @@ private:
 };
 
 
-cv::Mat drawAbstructedImage(const cv::Mat &image, CuvatureExtremaFinder& cef)
+cv::Mat drawAbstractedImage(const cv::Mat &image, CuvatureExtremaFinder &cef)
 {
     cv::Mat image_abstructed = image.clone();
     const ImageSize image_size = cef.get_image_size();
@@ -221,8 +220,7 @@ cv::Mat drawAbstructedImage(const cv::Mat &image, CuvatureExtremaFinder& cef)
             const Position2D pos_extrema = cef._pixel_node_list[hash_extrema].position();
             int32_t x_abs = pos_extrema.x;
             int32_t y_abs = pos_extrema.y;
-            std::cout << x_abs << " " << y_abs << std::endl;
-            image_abstructed.at<cv::Vec3b>(y,x) = image_abstructed.at<cv::Vec3b>(y_abs,x_abs);
+            image_abstructed.at<cv::Vec3b>(y, x) = image_abstructed.at<cv::Vec3b>(y_abs, x_abs);
         }
     }
 

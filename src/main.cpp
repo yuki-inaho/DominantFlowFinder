@@ -12,11 +12,13 @@
 
 std::string PARENT_DIR = getParentDir();
 
-struct ParsedArgument{
+struct ParsedArgument
+{
     bool save_image_curvature;
 };
 
-ParsedArgument parse_args(int argc, char **argv){
+ParsedArgument parse_args(int argc, char **argv)
+{
     argparse::ArgumentParser parser("dominant_flow_finder", "Calcurate dominant flow", "MIT License");
     parser.addArgument({"--save-image-curvature", "-s"}, "flag", argparse::ArgumentType::StoreTrue);
     auto args = parser.parseArgs(argc, argv);
@@ -28,14 +30,14 @@ ParsedArgument parse_args(int argc, char **argv){
 int main(int argc, char **argv)
 {
     ParsedArgument args = parse_args(argc, argv);
-        
+
     cv::Mat rgb_image = cv::imread("../data/image.png");
     cv::Mat rgb_image_resized;
     cv::Mat gray_image;
     cv::resize(rgb_image, rgb_image_resized, cv::Size(), 0.5, 0.5);
 
-    std::chrono::system_clock::time_point  start, end; // 型は auto で可
-    start = std::chrono::system_clock::now(); // 計測開始時間
+    std::chrono::system_clock::time_point start, end; // 型は auto で可
+    start = std::chrono::system_clock::now();         // 計測開始時間
     cv::cvtColor(rgb_image_resized, gray_image, cv::COLOR_RGB2GRAY);
 
     ImageCurvatureCalcurator curvature_calcurtor;
@@ -49,15 +51,15 @@ int main(int argc, char **argv)
     //std::vector<Position2D> extrema_pos_list = curvature_extrema_finder.get_extrema_position2D_list();
     //cv::Mat image_extrema = drawExtremaPoints(rgb_image_resized, extrema_pos_list);
     curvature_extrema_finder.set_graph();
-    
+
     /*
     cv::Mat extrema_image = curvature_extrema_finder.get_extrema_image();
     cv::imwrite("../extrema.png", extrema_image);
     cv::waitKey(10);
     */
 
-    end = std::chrono::system_clock::now(); // 計測開始時間
-    double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end-start).count(); //処理に要した時間をミリ秒に変換
+    end = std::chrono::system_clock::now();                                                      // 計測開始時間
+    double elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count(); //処理に要した時間をミリ秒に変換
     std::cout << "elapsed: " << elapsed << " [ms]" << std::endl;
 
     // dump image
@@ -70,8 +72,8 @@ int main(int argc, char **argv)
         dumpCVMat(save_path_str, image_curvature);
     }
 
-    //cv::Mat image_abstructed = drawAbstructedImage(rgb_image_resized, curvature_extrema_finder);
-    //cv::imwrite("../abstructed.png", image_abstructed);
+    //cv::Mat image_abstructed = drawAbstractedImage(rgb_image_resized, curvature_extrema_finder);
+    //cv::imwrite("../abstracted.png", image_abstructed);
     //cv::imwrite("../extrema.png", image_extrema);
     cv::imwrite("../gray.png", gray_image);
     return 0;
