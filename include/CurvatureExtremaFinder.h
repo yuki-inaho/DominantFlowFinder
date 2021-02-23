@@ -19,7 +19,7 @@ public:
         _set_image_size(_curvature_image);
     }
 
-    void initialize_pixel_nodes()
+    void initialize_pixel_nodes(int32_t kernel_size = 3)
     {
         _pixel_node_list = std::vector<PixelNode>(_image_size.width * _image_size.height, PixelNode());
 
@@ -29,7 +29,7 @@ public:
             {
                 Position2D pos_2d = {x, y};
                 size_t hash = position2hash(pos_2d, _image_size);
-                Position2D pos_neighbor_highest_curvature = _search_relative_high_curvature_position(pos_2d);
+                Position2D pos_neighbor_highest_curvature = _search_relative_high_curvature_position(pos_2d, kernel_size);
 
                 float curvature = _curvature_image.at<float>(y, x);
                 PixelNode node = PixelNode(pos_2d, pos_neighbor_highest_curvature, _image_size, curvature);

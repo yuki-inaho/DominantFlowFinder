@@ -9,6 +9,7 @@
 #include "ImageCurvatureCalcurator.h"
 #include "CurvatureExtremaFinder.h"
 #include "PixelNode.h"
+#include "timer.h"
 
 std::string PARENT_DIR = getParentDir();
 
@@ -30,11 +31,12 @@ ParsedArgument parse_args(int argc, char **argv)
 int main(int argc, char **argv)
 {
     ParsedArgument args = parse_args(argc, argv);
+    Timer timer;
 
     cv::Mat rgb_image = cv::imread("../data/image.png");
     cv::Mat rgb_image_resized;
     cv::Mat gray_image;
-    cv::resize(rgb_image, rgb_image_resized, cv::Size(), 0.5, 0.5);
+    cv::resize(rgb_image, rgb_image_resized, cv::Size(), 1.0/3, 1.0/3);
 
     std::chrono::system_clock::time_point start, end; // 型は auto で可
     start = std::chrono::system_clock::now();         // 計測開始時間
@@ -48,9 +50,10 @@ int main(int argc, char **argv)
     curvature_extrema_finder.set_curvature_image(image_curvature);
     curvature_extrema_finder.initialize_pixel_nodes();
     curvature_extrema_finder.set_curvature_order_information();
-    //std::vector<Position2D> extrema_pos_list = curvature_extrema_finder.get_extrema_position2D_list();
-    //cv::Mat image_extrema = drawExtremaPoints(rgb_image_resized, extrema_pos_list);
     curvature_extrema_finder.set_graph();
+
+    std::vector<Position2D> extrema_pos_list = curvature_extrema_finder.get_extrema_position2D_list();
+    cv::Mat image_extrema = drawExtremaPoints(rgb_image_resized, extrema_pos_list);
 
     /*
     cv::Mat extrema_image = curvature_extrema_finder.get_extrema_image();
@@ -72,9 +75,9 @@ int main(int argc, char **argv)
         dumpCVMat(save_path_str, image_curvature);
     }
 
-    //cv::Mat image_abstructed = drawAbstractedImage(rgb_image_resized, curvature_extrema_finder);
-    //cv::imwrite("../abstracted.png", image_abstructed);
-    //cv::imwrite("../extrema.png", image_extrema);
+    cv::Mat image_abstructed = drawAbstractedImage(rgb_image_resized, curvature_extrema_finder);
+    cv::imwrite("../abstracted.png", image_abstructed);
+    cv::imwrite("../extrema.png", image_extrema);
     cv::imwrite("../gray.png", gray_image);
     return 0;
 }

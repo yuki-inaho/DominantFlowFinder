@@ -12,9 +12,9 @@ add_executable(
 )
 
 #set(CMAKE_BUILD_TYPE Debug)
-#set(CMAKE_CXX_FLAGS "-O0 -std=c++11")
+#set(CMAKE_CXX_FLAGS "-O0 -std=c++11 -lprofiler")
 set(CMAKE_BUILD_TYPE Release)
-set(CMAKE_CXX_FLAGS "-Ofast -std=c++11")
+set(CMAKE_CXX_FLAGS "-O3 -std=c++11")
 
 include_directories(include)
 find_package(Threads REQUIRED)
@@ -24,6 +24,7 @@ pkg_check_modules(OpenCV REQUIRED opencv)
 include_directories(${OpenCV_CFLAGS})
 target_link_libraries(${PROJ_NAME} ${OpenCV_LDFLAGS})
 target_link_libraries(${PROJ_NAME} stdc++fs)
+#target_link_libraries (${PROJ_NAME} profiler)
 
 set(BUILD_TEST FALSE)
 if(BUILD_TEST)
